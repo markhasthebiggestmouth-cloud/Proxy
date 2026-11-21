@@ -3,78 +3,68 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wi-Fi Proxy Profile Maker</title>
+
+<title>Wi-Fi Proxy Maker</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    min-height: 100vh;
-    background: #101114;
-    color: white;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: white;
+    color: black;
+    font-family: "Comic Sans MS", cursive;
     padding: 20px;
 }
 
 .container {
     width: 100%;
-    max-width: 430px;
-    background: #1c1b20;
-    border: 1px solid #333238;
-    border-radius: 24px;
-    padding: 28px;
+    max-width: 600px;
+    margin: 20px auto;
+    background: white;
+    border: 1px solid black;
+    padding: 20px;
 }
 
 .logo {
-    width: 60px;
-    height: 60px;
-    background: #292a35;
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    margin-bottom: 20px;
+    font-size: 40px;
+    margin-bottom: 10px;
 }
 
 h1 {
-    font-size: 25px;
-    margin: 0;
+    font-family: "Comic Sans MS", cursive;
+    font-size: 28px;
+    margin: 0 0 10px;
 }
 
 .subtitle {
-    color: #999;
-    margin: 10px 0 25px;
-    font-size: 14px;
+    font-size: 16px;
+    margin-bottom: 20px;
 }
 
 label {
     display: block;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    margin-top: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 5px;
 }
 
 input {
     width: 100%;
-    padding: 14px;
-    border-radius: 12px;
-    border: 1px solid #38373d;
-    background: #29282e;
-    color: white;
+    padding: 8px;
+    background: white;
+    color: black;
+    border: 1px solid gray;
+    border-radius: 0;
+    font-family: "Comic Sans MS", cursive;
     font-size: 16px;
-    outline: none;
 }
 
 input:focus {
-    border-color: #777;
+    outline: 1px solid black;
 }
 
 .password-wrapper {
@@ -82,73 +72,73 @@ input:focus {
 }
 
 .password-wrapper input {
-    padding-right: 75px;
+    padding-right: 65px;
 }
 
 .show-password {
     position: absolute;
-    right: 12px;
+    right: 5px;
     top: 50%;
     transform: translateY(-50%);
-    background: none;
+    background: white;
     border: none;
-    color: #aaa;
+    color: blue;
+    text-decoration: underline;
+    font-family: "Comic Sans MS", cursive;
     cursor: pointer;
-    font-size: 13px;
 }
 
 .section {
     margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid #333;
+    padding-top: 15px;
+    border-top: 1px solid black;
 }
 
 .section-title {
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 4px;
+    font-weight: bold;
+    font-size: 18px;
 }
 
 .section-description {
-    color: #888;
-    font-size: 12px;
+    font-size: 14px;
+    margin-top: 5px;
 }
 
 button.generate {
     width: 100%;
-    padding: 16px;
-    margin-top: 25px;
-    border: none;
-    border-radius: 14px;
-    background: #ffffff;
-    color: #111;
-    font-weight: 700;
-    font-size: 15px;
+    padding: 10px;
+    margin-top: 20px;
+    background: #eeeeee;
+    color: black;
+    border: 2px outset buttonborder;
+    border-radius: 0;
+    font-family: "Comic Sans MS", cursive;
+    font-size: 16px;
     cursor: pointer;
-    transition: 0.2s;
 }
 
 button.generate:hover {
-    background: #ddd;
+    background: #dddddd;
 }
 
 button.generate:active {
-    transform: scale(.98);
+    border-style: inset;
 }
 
 #status {
-    text-align: center;
-    font-size: 13px;
+    text-align: left;
     margin-top: 15px;
-    color: #aaa;
+    font-size: 14px;
 }
 
 .footer {
     margin-top: 20px;
-    font-size: 11px;
-    color: #777;
-    line-height: 1.6;
+    font-size: 12px;
+    line-height: 1.5;
+    border-top: 1px solid gray;
+    padding-top: 10px;
 }
+
 </style>
 </head>
 
@@ -161,10 +151,10 @@ button.generate:active {
     <h1>Wi-Fi Proxy Maker</h1>
 
     <p class="subtitle">
-        Create an iOS configuration profile.
+        Make your own Wi-Fi configuration profile!
     </p>
 
-    <!-- WIFI INFORMATION -->
+    <!-- WIFI SETTINGS -->
 
     <label for="ssid">Wi-Fi Network Name</label>
 
@@ -202,14 +192,14 @@ button.generate:active {
     <div class="section">
 
         <div class="section-title">
-            Proxy Configuration
+            Proxy Settings
         </div>
 
         <div class="section-description">
-            Configure the proxy used by this Wi-Fi profile.
+            Enter the proxy server information.
         </div>
 
-        <label for="proxy">Proxy Server</label>
+        <label for="proxy">Proxy Server IP</label>
 
         <input
             type="text"
@@ -227,24 +217,35 @@ button.generate:active {
 
     </div>
 
-    <button class="generate" onclick="generateProfile()">
-        Generate Configuration Profile
+    <!-- GENERATE BUTTON -->
+
+    <button
+        class="generate"
+        onclick="generateProfile()"
+    >
+        Generate XML Profile
     </button>
 
     <div id="status"></div>
 
     <div class="footer">
-        This webpage generates a configuration file locally.
-        Your entered information is not uploaded by this code.
-        Configuration profiles can contain sensitive network
-        information. Only install profiles from trusted sources.
+
+        This website generates a configuration profile
+        directly in your browser.
+
+        <br><br>
+
+        Your Wi-Fi credentials are included in the
+        downloaded profile. Only install profiles and
+        use proxy servers that you trust.
+
     </div>
 
 </div>
 
 <script>
 
-// Show/hide password
+// SHOW / HIDE PASSWORD
 
 function togglePassword() {
 
@@ -269,7 +270,7 @@ function togglePassword() {
 }
 
 
-// XML escaping
+// ESCAPE XML SPECIAL CHARACTERS
 
 function escapeXML(value) {
 
@@ -283,7 +284,7 @@ function escapeXML(value) {
 }
 
 
-// Generate UUIDs
+// GENERATE UUID
 
 function UUID() {
 
@@ -292,7 +293,7 @@ function UUID() {
 }
 
 
-// Generate profile
+// GENERATE PROFILE
 
 function generateProfile() {
 
@@ -312,7 +313,7 @@ function generateProfile() {
         document.getElementById("status");
 
 
-    // Validation
+    // VALIDATION
 
     if (!ssid) {
 
@@ -348,20 +349,20 @@ function generateProfile() {
     ) {
 
         status.textContent =
-            "Enter a valid port between 1 and 65535.";
+            "Please enter a valid port.";
 
         return;
 
     }
 
 
-    // Generate unique IDs
+    // GENERATE UNIQUE UUIDS
 
     const profileUUID = UUID();
     const wifiUUID = UUID();
 
 
-    // XML Profile
+    // XML CONFIGURATION PROFILE
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -370,7 +371,6 @@ function generateProfile() {
 <dict>
 
     <key>PayloadContent</key>
-
     <array>
 
         <dict>
@@ -440,7 +440,7 @@ function generateProfile() {
 </plist>`;
 
 
-    // Create download
+    // CREATE DOWNLOAD
 
     const blob = new Blob(
         [xml],
@@ -454,7 +454,6 @@ function generateProfile() {
     const link = document.createElement("a");
 
     link.href = url;
-
     link.download = "WiFi-Proxy.mobileconfig";
 
     document.body.appendChild(link);
@@ -463,11 +462,15 @@ function generateProfile() {
 
     link.remove();
 
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setTimeout(() => {
+        URL.revokeObjectURL(url);
+    }, 1000);
 
+
+    // SUCCESS MESSAGE
 
     status.textContent =
-        "Profile generated! Check your downloads.";
+        "Profile downloaded! Check your Downloads folder.";
 
 }
 
