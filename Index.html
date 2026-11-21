@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wi-Fi Proxy Profile Maker</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #101114;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 430px;
+    background: #1c1b20;
+    border: 1px solid #333238;
+    border-radius: 24px;
+    padding: 28px;
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+    background: #292a35;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 25px;
+    margin: 0;
+}
+
+.subtitle {
+    color: #999;
+    margin: 10px 0 25px;
+    font-size: 14px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    margin-top: 18px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #38373d;
+    background: #29282e;
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+input:focus {
+    border-color: #777;
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 75px;
+}
+
+.show-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.section {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+}
+
+.section-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.section-description {
+    color: #888;
+    font-size: 12px;
+}
+
+button.generate {
+    width: 100%;
+    padding: 16px;
+    margin-top: 25px;
+    border: none;
+    border-radius: 14px;
+    background: #ffffff;
+    color: #111;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button.generate:hover {
+    background: #ddd;
+}
+
+button.generate:active {
+    transform: scale(.98);
+}
+
+#status {
+    text-align: center;
+    font-size: 13px;
+    margin-top: 15px;
+    color: #aaa;
+}
+
+.footer {
+    margin-top: 20px;
+    font-size: 11px;
+    color: #777;
+    line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">📶</div>
+
+    <h1>Wi-Fi Proxy Maker</h1>
+
+    <p class="subtitle">
+        Create an iOS configuration profile.
+    </p>
+
+    <!-- WIFI INFORMATION -->
+
+    <label for="ssid">Wi-Fi Network Name</label>
+
+    <input
+        type="text"
+        id="ssid"
+        placeholder="Enter Wi-Fi name"
+        autocomplete="off"
+    >
+
+    <label for="password">Wi-Fi Password</label>
+
+    <div class="password-wrapper">
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Enter Wi-Fi password"
+            autocomplete="off"
+        >
+
+        <button
+            class="show-password"
+            type="button"
+            onclick="togglePassword()"
+            id="showButton"
+        >
+            Show
+        </button>
+
+    </div>
+
+    <!-- PROXY SETTINGS -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Proxy Configuration
+        </div>
+
+        <div class="section-description">
+            Configure the proxy used by this Wi-Fi profile.
+        </div>
+
+        <label for="proxy">Proxy Server</label>
+
+        <input
+            type="text"
+            id="proxy"
+            value="191.101.179.131"
+        >
+
+        <label for="port">Proxy Port</label>
+
+        <input
+            type="number"
+            id="port"
+            value="4443"
+        >
+
+    </div>
+
+    <button class="generate" onclick="generateProfile()">
+        Generate Configuration Profile
+    </button>
+
+    <div id="status"></div>
+
+    <div class="footer">
+        This webpage generates a configuration file locally.
+        Your entered information is not uploaded by this code.
+        Configuration profiles can contain sensitive network
+        information. Only install profiles from trusted sources.
+    </div>
+
+</div>
+
+<script>
+
+// Show/hide password
+
+function togglePassword() {
+
+    const passwordInput =
+        document.getElementById("password");
+
+    const showButton =
+        document.getElementById("showButton");
+
+    if (passwordInput.type === "password") {
+
+        passwordInput.type = "text";
+        showButton.textContent = "Hide";
+
+    } else {
+
+        passwordInput.type = "password";
+        showButton.textContent = "Show";
+
+    }
+
+}
+
+
+// XML escaping
+
+function escapeXML(value) {
+
+    return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
+
+}
+
+
+// Generate UUIDs
+
+function UUID() {
+
+    return crypto.randomUUID().toUpperCase();
+
+}
+
+
+// Generate profile
+
+function generateProfile() {
+
+    const ssid =
+        document.getElementById("ssid").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const proxy =
+        document.getElementById("proxy").value.trim();
+
+    const port =
+        document.getElementById("port").value.trim();
+
+    const status =
+        document.getElementById("status");
+
+
+    // Validation
+
+    if (!ssid) {
+
+        status.textContent =
+            "Please enter a Wi-Fi network name.";
+
+        return;
+
+    }
+
+    if (!password) {
+
+        status.textContent =
+            "Please enter a Wi-Fi password.";
+
+        return;
+
+    }
+
+    if (!proxy) {
+
+        status.textContent =
+            "Please enter a proxy server.";
+
+        return;
+
+    }
+
+    if (
+        !Number.isInteger(Number(port)) ||
+        Number(port) < 1 ||
+        Number(port) > 65535
+    ) {
+
+        status.textContent =
+            "Enter a valid port between 1 and 65535.";
+
+        return;
+
+    }
+
+
+    // Generate unique IDs
+
+    const profileUUID = UUID();
+    const wifiUUID = UUID();
+
+
+    // XML Profile
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+
+<plist version="1.0">
+<dict>
+
+    <key>PayloadContent</key>
+
+    <array>
+
+        <dict>
+
+            <key>AutoJoin</key>
+            <true/>
+
+            <key>EncryptionType</key>
+            <string>WPA</string>
+
+            <key>HIDDEN_NETWORK</key>
+            <false/>
+
+            <key>Password</key>
+            <string>${escapeXML(password)}</string>
+
+            <key>PayloadDescription</key>
+            <string>Configures Wi-Fi with HTTP Proxy</string>
+
+            <key>PayloadDisplayName</key>
+            <string>Wi-Fi Proxy</string>
+
+            <key>PayloadIdentifier</key>
+            <string>com.custom.wifiproxy.payload</string>
+
+            <key>PayloadType</key>
+            <string>com.apple.wifi.managed</string>
+
+            <key>PayloadUUID</key>
+            <string>${wifiUUID}</string>
+
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+
+            <key>ProxyType</key>
+            <string>Manual</string>
+
+            <key>ProxyServer</key>
+            <string>${escapeXML(proxy)}</string>
+
+            <key>ProxyServerPort</key>
+            <integer>${Number(port)}</integer>
+
+            <key>SSID_STR</key>
+            <string>${escapeXML(ssid)}</string>
+
+        </dict>
+
+    </array>
+
+    <key>PayloadDisplayName</key>
+    <string>Custom Wi-Fi Proxy</string>
+
+    <key>PayloadIdentifier</key>
+    <string>com.custom.wifiproxy</string>
+
+    <key>PayloadType</key>
+    <string>Configuration</string>
+
+    <key>PayloadUUID</key>
+    <string>${profileUUID}</string>
+
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+
+</dict>
+</plist>`;
+
+
+    // Create download
+
+    const blob = new Blob(
+        [xml],
+        {
+            type: "application/x-apple-aspen-config"
+        }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+    link.href = url;
+
+    link.download = "WiFi-Proxy.mobileconfig";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+
+    status.textContent =
+        "Profile generated! Check your downloads.";
+
+}
+
+</script>
+
+</body>
+</html>
